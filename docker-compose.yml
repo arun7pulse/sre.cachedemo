@@ -1,17 +1,105 @@
 version: '3'
+networks:
+  net-cache:
+    driver: bridge
+volumes:
+  fastdata:
+  flaskdata:
+  pgdata:
+    driver: local
+  mysqldata:
+  redisdata:
+  prometheusdata:
+  grafanadata:
 services:
-  api:
-    container_name: flask-container
-    build: .
-    entrypoint: python app.py
-    env_file:
-      - .env
+  flaskapp:
+    build:
+      context: app
+      target: builder # flask requires SIGINT to stop gracefully (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
     ports:
       - '5000:5000'
+    container_name: flask-container
+    volumes:
+      - flaskdata:/var/lib/flaskapp/data
+    networks:
+      - net-cache
+  # postgres:
+  #   container_name: postgres-container
+  #   image: postgres:latest
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     PGDATA: /var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
+  #   restart: unless-stopped
+  #   networks:
+  #     - net-cache
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql-container
+  #   hostname: mysql
+  #   volumes:
+  #     - mysqldata:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD=true
+  #     - MYSQL_USER=smartcache
+  #     - MYSQL_PASSWORD=smartcache
+  #     - MYSQL_DATABASE=smartcache
+  #   networks:
+  #     - net-cache
   redis:
-    image: redis
+    image: redis:latest
     container_name: redis-container
     ports:
-      - "6379:6379"
-    expose:
-      - 6379
+      - 6379:6379
+    volumes:
+      - redisdata:/data
+    networks:
+      - net-cache
+  # redis-exporter:
+  #   container_name: redis-exporter
+  #   image: bitnami/redis-exporter:latest
+  #   ports:
+  #     - 9121:9121
+  #   environment:
+  #     REDIS_ADDR: redis:6379
+  #   links:
+  #     - redis
+  #     - prometheus
+  #   networks:
+  #     - net-cache
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus-container
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #   ports:
+  #     - 9090:9090
+  #   restart: unless-stopped
+  #   volumes:
+  #     - prometheusdata:/prometheus
+  #     - ./prometheus:/etc/prometheus
+  #   networks:
+  #     - net-cache
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana-container
+  #   ports:
+  #     - 3000:3000
+  #   restart: unless-stopped
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_SECURITY_ADMIN_PASSWORD=grafana
+  #     # - GF_INSTALL_PLUGINS=redis-app
+  #   volumes:
+  #     - grafanadata:/var/lib/grafana
+  #     - ./grafana/provisioning/:/etc/grafana/provisioning
+  #   networks:
+  #     - net-cache
