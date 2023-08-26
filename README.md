@@ -21,7 +21,7 @@ pip install python-dotenv requests flask Flask-Caching redis --trusted-host pypi
 ### Docker Compose Up 
 
 ```
-docker compose up -d --build --remoove-orphans
+docker compose up -d --build --remove-orphans
 ```
 
 ### Docker Compose Down 

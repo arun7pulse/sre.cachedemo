@@ -5,8 +5,7 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9-slim AS builder
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade 
 
 COPY ./app ./app
 

@@ -1,0 +1,1 @@
+return (redis.call('RG.TRIGGER', 'GetMetrics', '*'))[1]

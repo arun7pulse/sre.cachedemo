@@ -5,7 +5,7 @@ FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 WORKDIR /app
 
 COPY requirements.txt /app
-RUN --mount=type=cache,target=/root/.cache/pip pip3 install -r requirements.txt 
+RUN --mount=type=cache,target=/root/.cache/pip pip3 install -r requirements.txt --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade 
 #--no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
 # RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y net-tools && apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY . /app
