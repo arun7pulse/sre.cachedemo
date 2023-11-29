@@ -9,8 +9,8 @@ volumes:
   redisdata:
   pgdata:
     driver: local
-  timescaledata:
-  mysqldata:
+  # timescaledata:
+  # mysqldata:
   prometheusdata:
   grafanadata:
 services:
@@ -40,35 +40,35 @@ services:
     restart: unless-stopped
     networks:
       - net-cache
-  timescaledb:
-    container_name: timescale-container
-    image: timescale/timescaledb:latest-pg12
-    restart: always
-    ports:
-      - 5434:5434
-    environment:
-      POSTGRES_USER: timescaledb
-      POSTGRES_PASSWORD: password
-    volumes:
-      - timescaledata:/var/lib/postgresql/data
-    networks:
-      - net-cache
-  mysql:
-    image: mysql:latest
-    container_name: mysql-container
-    hostname: mysql
-    volumes:
-      - mysqldata:/var/lib/mysql
-    ports:
-      - 3306:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_USER=smartcache
-      - MYSQL_PASSWORD=smartcache
-      - MYSQL_DATABASE=smartcache
-    networks:
-      - net-cache
+  # timescaledb:
+  #   container_name: timescale-container
+  #   image: timescale/timescaledb:latest-pg12
+  #   restart: always
+  #   ports:
+  #     - 5434:5434
+  #   environment:
+  #     POSTGRES_USER: timescaledb
+  #     POSTGRES_PASSWORD: password
+  #   volumes:
+  #     - timescaledata:/var/lib/postgresql/data
+  #   networks:
+  #     - net-cache
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql-container
+  #   hostname: mysql
+  #   volumes:
+  #     - mysqldata:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD=true
+  #     - MYSQL_USER=smartcache
+  #     - MYSQL_PASSWORD=smartcache
+  #     - MYSQL_DATABASE=smartcache
+  #   networks:
+  #     - net-cache
   redis:
     image: docker.io/bitnami/redis:latest
     container_name: redis-container
@@ -128,7 +128,7 @@ services:
     image: docker.io/grafana/grafana:latest
     container_name: grafana-container
     ports:
-      - 3000:3000
+      - 4000:4000
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=admin
