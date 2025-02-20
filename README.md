@@ -30,6 +30,7 @@ docker compose up -d --build --remove-orphans
 
 ```
 docker compose -f docker-compose.rabbitmq.yml up -d --build --remove-orphans
+docker compose -f docker-compose.postgresql.yaml up -d --build --remove-orphans
 ```
 
 

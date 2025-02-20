@@ -128,7 +128,7 @@ services:
     image: docker.io/grafana/grafana:latest
     container_name: grafana-container
     ports:
-      - 4000:4000
+      - 3000:3000
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=admin

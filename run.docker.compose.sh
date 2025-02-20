@@ -7,7 +7,7 @@ if($1){
 docker-compose up -d --build --remove-orphans
 
 
-# docker compose -f docker_devcompose.yml up -d
+# docker compose -f docker_devcompose.yaml up -d
 
 
 
